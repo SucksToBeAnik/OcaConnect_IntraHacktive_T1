@@ -1,3 +1,5 @@
+import { Resend } from "resend";
+
 export function responseToReturn(success, message, data) {
   return {
     success: success,
@@ -5,3 +7,6 @@ export function responseToReturn(success, message, data) {
     data: data,
   };
 }
+
+
+export const resend = new Resend(process.env.RESEND_API_KEY);
