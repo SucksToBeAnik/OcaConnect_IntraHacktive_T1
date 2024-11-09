@@ -1,7 +1,7 @@
-
 import { Button } from "@/components/ui/button"
 import ClubCarousel from "./ClubCarousel";
 import { Inter, Roboto_Mono } from 'next/font/google'
+import Image from 'next/image'
 
 export const inter = Inter({
   subsets: ['latin'],
@@ -37,8 +37,8 @@ const Page = ()=> {
           </Button>
       </div>
 
-      <div className="flex items-center justify-center h-auto mt-16">
-        <img className="fade-bottom-image object-cover " src="images/female.png" alt="Female Illustration" />
+      <div className="flex items-center justify-center h-auto mt-12 mb-16">
+        <Image className="fade-bottom-image object-cover" src="/images/female.png" alt="Female Illustration" width={500} height={500} />
 
         <div className="my-10">
           <h1 className=" text-8xl font-bold tracking-tight lg:text-5xl text-wrap w-96">
@@ -57,20 +57,17 @@ const Page = ()=> {
 
       </div>
 
-      <div className="flex flex-row items-center justify-center m-16">
+      <div className="flex flex-col md:flex-row items-center md:items-start justify-between px-8">
         <div className={roboto_mono.className}>
-        <h1 className=" text-5xl font-bold  text-wrap m-10 ">
-                  Explore The 
-                  <div className="bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
-                  Clubs 
-                  </div>
-                  Of BRACU
-            
-
+          <h1 className="text-5xl font-bold text-wrap mb-8 md:mb-0">
+            Explore The 
+            <div className="bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
+              Clubs 
+            </div>
+            Of BRACU
           </h1>
         </div>
-      
-          <ClubCarousel></ClubCarousel>
+        <ClubCarousel />
       </div>
                     
     </div>
