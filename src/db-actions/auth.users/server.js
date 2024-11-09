@@ -1,6 +1,10 @@
 import { responseToReturn } from "@/lib/helpers";
 import { createClient } from "@/utils/supabase/server";
 
+/**
+ * Get the authorized user
+ * @returns {object}
+ */
 export async function getAuthorizedUser() {
   const sb = createClient();
   try {
@@ -14,7 +18,7 @@ export async function getAuthorizedUser() {
     return responseToReturn(
       true,
       "Authorized user fetched successfully",
-      authorizedUser
+      authorizedUser.user
     );
   } catch (error) {
     if (error instanceof Error) {
@@ -23,3 +27,5 @@ export async function getAuthorizedUser() {
     return responseToReturn(false, "Internal server error", null);
   }
 }
+
+

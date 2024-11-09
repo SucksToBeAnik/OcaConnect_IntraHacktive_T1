@@ -24,20 +24,27 @@ export default function LoginForm() {
 
   const onSubmit = async (data) => {
     const formSubmissionPromise = new Promise(async (resolve, reject) => {
+      console.log("data:-----", data);
       try {
         const response = await fetch("/api/login", {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify(data),
         });
+        
         const responseData = await response.json();
-        console.log(responseData);
-        if (response.status === 200) {
-          resolve(responseData.message);
+        
+        if (response.ok) {
+          resolve(responseData.message || "Login successful");
         } else {
-          reject(responseData.message);
+          console.log("responseData:-----", response);
+          reject(responseData.message || "Login failed");
         }
       } catch (error) {
-        reject(error);
+        console.log("error:-----", error);
+        reject("An error occurred during login");
       }
     });
 
@@ -65,7 +72,7 @@ export default function LoginForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your (g-suite) email" type="email" {...field} />
+                  <Input placeholder="Enter your email" type="email" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -19,14 +19,48 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { SearchToInviteCombobox } from "./SearchToInviteCombobox";
+import { toast } from "sonner";
 
-export default function HrDashboard({ clubMembers }) {
+export default function HrDashboard({ clubMembers, eligibleMembersForInvite, clubId }) {
   const [showPendingInvites, setShowPendingInvites] = useState(false);
   const [showInviteForm, setShowInviteForm] = useState(false);
-  
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [isSendingInvitation, setIsSendingInvitation] = useState(false);
+
+  async function handleSendInvitation() {
+    if (!selectedMember || !selectedRole) {
+      toast.error("Please select a member and a role");
+      return;
+    }
+    
+    const loadingToast = toast.loading("Sending invitation...");
+    setIsSendingInvitation(true);
+    
+    try {
+      const response = await fetch("/api/invite-club-member", {
+        method: "POST",
+        body: JSON.stringify({ email: selectedMember.email, role: selectedRole, club_id: clubId }),
+      });
+      const data = await response.json();
+      
+      toast.dismiss(loadingToast);
+      if (response.ok) {
+        toast.success("Invitation sent successfully");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error("Failed to send invitation");
+    } finally {
+      setIsSendingInvitation(false);
+    }
+  }
   const pendingInvites = [
-    { email: "example@email.com", message: "Please join our club" },
-    // ... more invites
+    { email: "aljami.islam.anik@g.bracu.ac.bd", message: "Please accept the invitation senpai" },
+    { email: "mustafis.ahsan@g.bracu.ac.bd", message: "I want to join the club" },
   ];
 
   return (
@@ -36,17 +70,17 @@ export default function HrDashboard({ clubMembers }) {
       </h1>
 
       <div className="flex flex-row justify-between items-center gap-4 mb-6">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="flex items-center gap-2"
           onClick={() => setShowInviteForm(true)}
         >
           <UserPlus className="h-4 w-4" />
           Invite Member
         </Button>
-        
-        <Button 
-          variant="outline" 
+
+        <Button
+          variant="outline"
           className="flex items-center gap-2"
           onClick={() => setShowPendingInvites(true)}
         >
@@ -64,24 +98,34 @@ export default function HrDashboard({ clubMembers }) {
             <DialogTitle>Invite New Member</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col">
               <label htmlFor="email">Email</label>
-              <Input id="email" type="email" placeholder="Enter email address" />
+              <SearchToInviteCombobox
+                eligibleMembersForInvite={eligibleMembersForInvite}
+                setSelectedMember={setSelectedMember}
+              />
             </div>
             <div className="space-y-2">
               <label htmlFor="role">Role</label>
-              <Select>
+              <Select
+                value={selectedRole}
+                onValueChange={(value) => setSelectedRole(value)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="hr">HR</SelectItem>
                   <SelectItem value="panel">Panel</SelectItem>
-                  <SelectItem value="general">General Member</SelectItem>
+                  <SelectItem value="director">Director</SelectItem>
+                  <SelectItem value="member">Member</SelectItem>
+                  <SelectItem value="executive">Executive</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <Button className="w-full">Send Invitation</Button>
+            <Button className="w-full" onClick={handleSendInvitation}>
+              Send Invitation
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -93,13 +137,22 @@ export default function HrDashboard({ clubMembers }) {
           </DialogHeader>
           <div className="space-y-4">
             {pendingInvites.map((invite, index) => (
-              <div key={index} className="border p-4 rounded-lg flex items-center justify-between">
+              <div
+                key={index}
+                className="border p-4 rounded-lg flex items-center justify-between"
+              >
                 <div>
                   <p className="font-medium">{invite.email}</p>
-                  <p className="text-sm text-muted-foreground">{invite.message}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {invite.message}
+                  </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="icon" variant="ghost" className="text-green-600">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    className="text-green-600"
+                  >
                     <Check className="h-4 w-4" />
                   </Button>
                   <Button size="icon" variant="ghost" className="text-red-600">

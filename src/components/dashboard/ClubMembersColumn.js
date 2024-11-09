@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 import { MoreHorizontal } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
  
 import {
   DropdownMenu,
@@ -17,6 +18,10 @@ export const clubMembersColumns = [
   {
     accessorKey: "name",
     header: "Name",
+    cell: ({ row }) => {
+      const name = row.original.club_members.name;
+      return <Badge variant="outline">{name}</Badge>;
+    },
   },
   {
     accessorKey: "email",
@@ -31,10 +36,18 @@ export const clubMembersColumns = [
           </Button>
       );
     },
+    cell: ({ row }) => {
+      const email = row.original.club_members.email;
+      return <Badge variant="outline">{email}</Badge>;
+    },
   },
   {
     accessorKey: "role",
     header: "Role",
+    cell: ({ row }) => {
+      const role = row.original.role;
+      return <Badge variant="outline">{role}</Badge>;
+    },
   },
   {
     id: "actions",
