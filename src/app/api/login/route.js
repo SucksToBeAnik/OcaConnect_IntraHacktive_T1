@@ -1,25 +1,35 @@
 import { createClient } from "@/utils/supabase/server";
-import { NextResponse } from "next/server";
 
 export async function POST(request) {
-    const sb = createClient();
-    try {
-        const body = await request.json();
-        if (!body.email || !body.password) {
-            return NextResponse.json({ message: "Email and password are required" }, { status: 400 });
-        }
-        const { data, error } = await sb.auth.signInWithPassword({
-            email: body.email,
-            password: body.password,
-        }); 
-        if (error) {
-            return NextResponse.json({ message: error.message }, { status: 500 });
-        }
-        return NextResponse.json({ message: "Login successful" }, { status: 200 });
-    } catch (error) {
-        if (error instanceof Error) {
-            return NextResponse.json({ message: error.message }, { status: 500 });
-        }
-        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  const sb = createClient();
+  try {
+    const body = await request.json();
+
+    // Input validation - trim and sanitize
+    const email = body.email?.trim();
+    const password = body.password?.trim();
+
+    if (!email || !password) {
+      return Response.json({ message: "Email and password are required" });
     }
+
+    const { data, error } = await sb.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      // Don't expose internal error messages
+      return Response.json({ message: "Invalid credentials" });
+    }
+
+    // Return the session data along with success message
+    return Response.json({
+      message: "Login successful",
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    // Don't expose internal error messages to client
+    return Response.json({ message: "Authentication failed" });
+  }
 }

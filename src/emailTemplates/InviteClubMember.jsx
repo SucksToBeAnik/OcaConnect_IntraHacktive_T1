@@ -1,9 +1,9 @@
-export default function InviteClubMember({ email, password }) {
+export default function InviteClubMember({ email, role, club }) {
     return (
         <div>
-            <h1>You have been invited to join a club!</h1>
-            <p>Email: {email}</p>
-            <p>Password: {password}</p>
+            <h1>Hello {email}! You have been invited to join a club!</h1>
+            <p>Role: {role}</p>
+            <p>Club: {club}</p>
         </div>
     )
 }
