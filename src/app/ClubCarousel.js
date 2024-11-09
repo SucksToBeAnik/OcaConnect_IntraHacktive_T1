@@ -60,37 +60,40 @@ const ClubCarousel = () => {
   ];
 
   return (
-    <Carousel plugins={[
-      Autoplay({
-        delay: 1700,
-      }),
-    ]}>
-        <CarouselContent>
+    <Carousel 
+      plugins={[
+        Autoplay({
+          delay: 1700,
+        }),
+      ]}
+      className="w-full md:w-[70%]"
+    >
+        <CarouselContent className="-ml-2 md:-ml-4">
             {clubs.map((club, index) => (
-            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/4">
-                <Card className="w-full max-w-sm mx-auto my-4 p-4 h-96">
-                <CardHeader className={`${club.gradientColor} rounded-t-lg p-4`}>
-                    <div className="flex items-center space-x-3">
-                    <img
-                        src={club.image}
-                        alt={club.title}
-                        width={50}
-                        height={50}
-                        className="rounded-full"
-                    />
-                    <div>
-                        <CardTitle className="  text-xl truncate">{club.title}</CardTitle>
-                        <CardDescription className="text-white ml-1 mr-1">{club.description}</CardDescription>
-                    </div>
-                    </div>
-                </CardHeader>
-                <CardContent className="p-4">
-                    <p className="text-gray-600">Stay updated with club activities and events.</p>
-                </CardContent>
-                <CardFooter className="flex justify-between items-center p-4">
-                    
-                    <Button className="font-semibold">See Activities</Button>
-                </CardFooter>
+            <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                <Card className="h-[400px]">
+                    <CardHeader className="p-4">
+                        <div className="flex items-center space-x-3">
+                            <img
+                                src={club.image}
+                                alt={club.title}
+                                width={50}
+                                height={50}
+                                className="rounded-full"
+                            />
+                            <div>
+                                <CardTitle className="text-lg truncate">{club.title}</CardTitle>
+                                <CardDescription className="text-sm line-clamp-2">{club.description}</CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                        <p className="text-gray-600">Stay updated with club activities and events.</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-between items-center p-4">
+                        
+                        <Button className="font-semibold">See Activities</Button>
+                    </CardFooter>
                 </Card>
             </CarouselItem>
             ))}
