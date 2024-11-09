@@ -6,7 +6,11 @@ import {
   CheckCircle, 
   RotateCcw,
   ChevronDown,
+  Fullscreen,
 } from "lucide-react";
+import EventForm from "./EventForm";
+
+
 
 // Sample static data
 const pendingEvents = [
@@ -26,12 +30,7 @@ const pendingEvents = [
 
 const FormActions = () => (
   <div className="flex flex-col gap-2 mt-2">
-    <Button 
-      variant="outline" 
-      className="w-full flex items-center gap-2"
-    >
-      <ChevronDown className="h-4 w-4" /> Expand
-    </Button>
+    <EventForm/>
     
     <div className="flex gap-2">
       <Button 

@@ -4,6 +4,7 @@ import SearchFilter from './comp/SearchFilter';
 import EventList from './comp/EventList';
 import EventPendingReview from './comp/EventPendingReview';
 import { Button } from "@/components/ui/button"
+import NewEventPopup from './comp/NewEventPopup';
 
 
 const TEST = () => {
@@ -34,10 +35,9 @@ const TEST = () => {
                 <div>Event</div>
                 </div>
             </h1>
-  
-            <Button className="mt-1 mb-2 bg-gradient-to-r w-40 p-4 h-11 from-purple-200 via-violet-400 to-indigo-600 font-semibold">
-                Create a New Event
-            </Button>
+
+
+            <NewEventPopup></NewEventPopup>
              </div>
 
 
