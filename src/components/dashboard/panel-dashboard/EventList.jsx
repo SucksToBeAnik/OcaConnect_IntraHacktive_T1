@@ -106,7 +106,7 @@ const EventCard = ({ event }) => {
         <div className="p-4 pt-2 border-t">
           <div className="space-y-4 flex">
             {/* Form Status Buttons */}
-            <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center gap-2">
               <FormStatusButton 
                 title="Budget Form"
                 icon={<DollarSign className="h-4 w-4" />}
