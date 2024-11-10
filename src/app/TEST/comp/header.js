@@ -29,7 +29,7 @@ const Header = () => {
               <div className="text-white font-medium">Fahim Mahbub</div>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="bg-white/20 text-white hover:bg-white/30">
-                  President
+                  OCA
                 </Badge>
               </div>
             </div>

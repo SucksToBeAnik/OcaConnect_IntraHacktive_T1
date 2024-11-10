@@ -5,6 +5,10 @@ import EventList from "./comp/EventList";
 import EventPendingReview from "./comp/EventPendingReview";
 import { Button } from "@/components/ui/button";
 import NewEventPopup from "./comp/NewEventPopup";
+import EVSearchBox from "./comp/EVSearchBox";
+import ArchivedEvents from "./comp/ArchivedEvents";
+import { Card } from "@/components/ui/card";
+import RoomMap from "./comp/RoomMap";
 
 const TEST = () => {
   return (
@@ -16,28 +20,19 @@ const TEST = () => {
       <div className="flex-1 p-4 gap-4 grid grid-cols-12">
         {/* Left column */}
         <div className="col-span-4 flex flex-col gap-4">
-          <SearchFilter></SearchFilter>
-
-          <EventList></EventList>
+          <EVSearchBox></EVSearchBox>
+          <EventPendingReview></EventPendingReview>
         </div>
 
         {/* Right column */}
         <div className="col-span-8 flex flex-col gap-4">
-          {/* Chat box */}
-          <div className="flex-col justify-start items-end ">
-            <h1 className="text-8xl font-bold tracking-tight lg:text-5xl">
-              <div>Nothig More Easy</div>
-              Than Hosting an
-              <div className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
-                <div>Event</div>
-              </div>
-            </h1>
-
-            <NewEventPopup></NewEventPopup>
-          </div>
-
-          <EventPendingReview></EventPendingReview>
+          <Card className='p-5'>
+            <RoomMap></RoomMap>
+          </Card>
+          <ArchivedEvents></ArchivedEvents>
         </div>
+
+        
       </div>
     </div>
   );
