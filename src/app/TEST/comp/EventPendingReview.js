@@ -1,104 +1,94 @@
+"use client"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { 
-  FileText, 
-  Download, 
-  CheckCircle, 
-  RotateCcw,
-  ChevronDown,
-  Fullscreen,
+  FileSpreadsheet, 
+  CalendarDays,
 } from "lucide-react";
-import EventForm from "./EventForm";
-import BudgetForm from "./BuddgetForm";
-
-
+import ReviewPopUp from "./ReviewPopUp";
+import { useState } from "react";
 
 // Sample static data
 const pendingEvents = [
   {
     id: "EVT-2024-001",
-    title: "Coding Fest For ROBU 2024",
+    title: "Annual Tech Conference 2024",
     budgetForm: "/path/to/budget.pdf",
     eventForm: "/path/to/event.pdf",
   },
   {
     id: "EVT-2024-002",
-    title: "Cosplay From Cultural Club",
+    title: "Leadership Summit Q2",
     budgetForm: "/path/to/budget.pdf",
     eventForm: "/path/to/event.pdf",
-  }
+  },
+  {
+    id: "EVT-2024-001",
+    title: "Annual Tech Conference 2024",
+    budgetForm: "/path/to/budget.pdf",
+    eventForm: "/path/to/event.pdf",
+  },
+  {
+    id: "EVT-2024-001",
+    title: "Annual Tech Conference 2024",
+    budgetForm: "/path/to/budget.pdf",
+    eventForm: "/path/to/event.pdf",
+  },
+  {
+    id: "EVT-2024-001",
+    title: "Annual Tech Conference 2024",
+    budgetForm: "/path/to/budget.pdf",
+    eventForm: "/path/to/event.pdf",
+  },
 ];
 
-const FormActions = () => (
-  <div className="flex flex-col gap-2 mt-2">
-    <EventForm/>
-    <BudgetForm></BudgetForm>
-    
-    
-    <div className="flex gap-2">
-      <Button 
-        variant="outline" 
-        className="flex-1 flex items-center gap-2"
-      >
-        <Download className="h-4 w-4" /> Download PDF
-      </Button>
-      
-      <Button 
-        variant="outline" 
-        className="flex-1 flex items-center gap-2"
-      >
-        <CheckCircle className="h-4 w-4" /> Approve
-      </Button>
-      
-      <Button 
-        variant="outline"
-        className="flex-1 flex items-center gap-2"
-      >
-        <RotateCcw className="h-4 w-4" /> Review
-      </Button>
-    </div>
-  </div>
-);
+
+
 
 export default function EventPendingReview() {
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+
+  const handleReviewClick = () => {
+    setIsReviewOpen(!isReviewOpen); 
+  };
   return (
-    <Card className="w-full ">
+    <Card className="w-full max-w-4xl">
       <CardHeader>
         <CardTitle>Waiting for your review</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {pendingEvents.map((event) => (
             <div 
               key={event.id}
-              className="border rounded-lg p-4 space-y-4"
+              className="border rounded-lg p-3 flex items-center justify-between"
             >
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className="text-lg font-semibold">{event.title}</h3>
-                  <p className="text-sm text-muted-foreground">{event.id}</p>
+              {/* Event Info */}
+              <div className="flex-grow">
+                <h3 className="font-medium">{event.title}</h3>
+                <p className="text-sm text-muted-foreground">{event.id}</p>
+              </div>
+
+              {/* Forms Status */}
+              <div className="flex items-center gap-6 px-4">
+                <div className="flex items-center gap-2">
+                  <FileSpreadsheet className="h-5 w-5 text-blue-500" />
+                  <span className="text-sm text-muted-foreground">Budget</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CalendarDays className="h-5 w-5 text-green-500" />
+                  <span className="text-sm text-muted-foreground">Event</span>
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                {/* Budget Form */}
-                <div className="border rounded-lg p-4">
-                  <div className="flex flex-col items-center gap-2">
-                    <FileText className="h-16 w-16" />
-                    <span className="font-medium">Budget Form</span>
-                  </div>
-                  <FormActions />
-                </div>
-
-                {/* Event Form */}
-                <div className="border rounded-lg p-4">
-                  <div className="flex flex-col items-center gap-2">
-                    <FileText className="h-16 w-16" />
-                    <span className="font-medium">Event Form</span>
-                  </div>
-                  <FormActions />
-                </div>
-              </div>
+              {/* Action Button */}
+              <Button variant="outline" size="sm" onClick={handleReviewClick}>
+                Review Forms
+              </Button>
+              <ReviewPopUp 
+                isOpen={isReviewOpen} 
+                onClose={() => setIsReviewOpen(false)}
+              />
             </div>
           ))}
         </div>
