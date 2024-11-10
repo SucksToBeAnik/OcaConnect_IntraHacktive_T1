@@ -3,6 +3,8 @@ import { getClubProfilesGivenClubId } from "@/db-actions/club-profiles/server";
 import { getAuthorizedUser } from "@/db-actions/auth.users/server";
 import { getUserActiveClubProfile } from "@/db-actions/club-profiles/server";
 import { getAllClubMembers } from "@/db-actions/club-members/server";
+import FinanceDashboard from "@/components/dashboard/FinanceDashboard";
+import EmptyContent from "@/components/root/EmptyContent";
 
 
 export default async function Page() {
@@ -29,5 +31,19 @@ export default async function Page() {
     pageContent = <HrDashboard clubMembers={clubMembers} eligibleMembersForInvite={eligibleMembersForInvite} clubId={activeClubProfile.data.club_id} />;
   }
 
-  return <div>{pageContent}</div>;
+  switch (role) {
+    case "hr":
+      pageContent = <HrDashboard clubMembers={clubMembers} eligibleMembersForInvite={eligibleMembersForInvite} clubId={activeClubProfile.data.club_id} />;
+      break;
+    case "finance":
+      pageContent = <FinanceDashboard />;
+      break;
+    default:
+      pageContent = <EmptyContent message="You are not authorized to access this page" />;
+      break;
+  }
+
+  return <div>
+    {pageContent}
+  </div>;
 }

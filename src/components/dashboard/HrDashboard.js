@@ -120,6 +120,7 @@ export default function HrDashboard({ clubMembers, eligibleMembersForInvite, clu
                   <SelectItem value="director">Director</SelectItem>
                   <SelectItem value="member">Member</SelectItem>
                   <SelectItem value="executive">Executive</SelectItem>
+                  <SelectItem value="finance">Finance</SelectItem>
                 </SelectContent>
               </Select>
             </div>

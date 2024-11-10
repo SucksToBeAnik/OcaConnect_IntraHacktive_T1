@@ -11,7 +11,7 @@ export async function getActiveClubMember(userId) {
   const { data, error } = await supabase
     .from("club_members")
     .select("*")
-    .eq("id", userId);
+    .eq("id", userId).single();
   if (error) {
     return responseToReturn(false, "Error fetching club member", null);
   }
