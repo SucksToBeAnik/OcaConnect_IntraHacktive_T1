@@ -2,12 +2,42 @@ import { createClient } from "@/utils/supabase/server";
 import { responseToReturn } from "@/lib/helpers";
 
 /**
+ * Get all the club profiles for a given user
+ * @param {string} userId
+ * @returns {object}
+ */
+export async function getAllClubProfilesGivenUserId(userId) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("club_profiles")
+    .select("*,clubs:club_id(name)")
+    .eq("club_member_id", userId);
+  if (error) {
+    return responseToReturn(false, "Error fetching club profiles", null);
+  }
+  return responseToReturn(true, "Club profiles fetched", data);
+}
+
+export async function getActiveClubProfileWithNameGivenUserId(userId) {
+  const supabase = createClient();
+  const { data: clubProfileData, error: clubProfileError } = await supabase
+    .from("club_profiles")
+    .select("*,club_members:club_member_id(name)")
+    .eq("id", clubMemberData.active_club_profile)
+    .single();
+  if (clubProfileError) {
+    return responseToReturn(false, "Error fetching club profile", null);
+  }
+
+  return responseToReturn(true, "Club profile fetched", clubProfileData);
+}
+
+/**
  * Get the active club profile for a user
  * @param {string} userId
  * @returns {object}
  */
 export async function getUserActiveClubProfile(userId) {
-    console.log(userId)
   const supabase = createClient();
   const { data: clubMemberData, error: clubMemberError } = await supabase
     .from("club_members")
@@ -47,12 +77,10 @@ export async function getClubProfilesGivenClubId(clubId) {
     .select("role,club_members:club_member_id(name, email)")
     .eq("club_id", clubId);
 
-
   if (error) {
     console.log(error);
     return responseToReturn(false, "Error fetching club profiles", null);
   }
-  
 
   return responseToReturn(true, "Club profiles fetched", data);
 }
