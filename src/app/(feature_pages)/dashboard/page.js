@@ -5,12 +5,16 @@ import { getUserActiveClubProfile } from "@/db-actions/club-profiles/server";
 import { getAllClubMembers } from "@/db-actions/club-members/server";
 import FinanceDashboard from "@/components/dashboard/FinanceDashboard";
 import EmptyContent from "@/components/root/EmptyContent";
+import PanelDashboard from "@/components/dashboard/panel-dashboard/PanelDashboard";
 
 
 export default async function Page() {
   const authorizedUser = await getAuthorizedUser();
   console.log(authorizedUser);
   const activeClubProfile = await getUserActiveClubProfile(authorizedUser.data.id);
+  if(!activeClubProfile.success){
+    return <EmptyContent message="You are not a member of any club" />;
+  }
   let clubMembers = [];
   let eligibleMembersForInvite = [];
 
@@ -37,6 +41,9 @@ export default async function Page() {
       break;
     case "finance":
       pageContent = <FinanceDashboard />;
+      break;
+    case "panel":
+      pageContent = <PanelDashboard clubId={activeClubProfile.data.club_id} />;
       break;
     default:
       pageContent = <EmptyContent message="You are not authorized to access this page" />;
