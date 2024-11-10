@@ -9,6 +9,7 @@ import {
   Fullscreen,
 } from "lucide-react";
 import EventForm from "./EventForm";
+import BudgetForm from "./BuddgetForm";
 
 
 
@@ -31,6 +32,8 @@ const pendingEvents = [
 const FormActions = () => (
   <div className="flex flex-col gap-2 mt-2">
     <EventForm/>
+    <BudgetForm></BudgetForm>
+    
     
     <div className="flex gap-2">
       <Button 
