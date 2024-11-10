@@ -5,27 +5,28 @@ import { Badge } from "../ui/badge";
 import { DialogTrigger, Dialog } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import BudgetForm from "./BudgetForm";
+import { createClient } from "@/utils/supabase/server";
 
-const pendingEvents = [
-  {
-    title: "BRACU CSE Fest 2024",
-    date: "10/10/2024",
-    budget: "50,000",
-    sponsor: "N/A",
-  },
-  {
-    title: "BRACU Tech Summit 2024",
-    date: "15/11/2024",
-    budget: "30,000",
-    sponsor: "N/A",
-  },
-  {
-    title: "BRACU Gaming Tournament",
-    date: "20/12/2024",
-    budget: "20,000",
-    sponsor: "N/A",
-  },
-];
+// const pendingEvents = [
+//   {
+//     title: "BRACU CSE Fest 2024",
+//     date: "10/10/2024",
+//     budget: "50,000",
+//     sponsor: "N/A",
+//   },
+//   {
+//     title: "BRACU Tech Summit 2024",
+//     date: "15/11/2024",
+//     budget: "30,000",
+//     sponsor: "N/A",
+//   },
+//   {
+//     title: "BRACU Gaming Tournament",
+//     date: "20/12/2024",
+//     budget: "20,000",
+//     sponsor: "N/A",
+//   },
+// ];
 
 const pastEvents = [
   {
@@ -48,7 +49,19 @@ const pastEvents = [
   },
 ];
 
-export default function FinanceDashboard() {
+export default async function FinanceDashboard({ clubId }) {
+  const supabase = createClient();
+  let pendingEvents = [];
+  const { data: eventsData, error } = await supabase
+    .from("events")
+    .select("*, event_forms(*), budget_forms(*)")
+    .eq("status", 1)
+    .eq("club_id", clubId)
+    ;
+  console.log(eventsData);
+  if (eventsData) {
+    pendingEvents = eventsData;
+  }
   return (
     <div className="grid grid-cols-12 gap-6 p-4 w-full h-full">
       <div className="col-span-5 flex flex-col gap-6">
@@ -73,16 +86,26 @@ export default function FinanceDashboard() {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>{event.title}</CardTitle>
-                  <Button variant="outline" size="sm">
+                  {/* <Button variant="outline" size="sm">
                     <Calendar className="mr-1 h-4 w-4" />
                     Will be held on {event.date}
-                  </Button>
+                  </Button> */}
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <p>Required Budget: {event.budget} BDT</p>
-                  <div>Sponsor: <Badge variant="outline">{event.sponsor}</Badge></div>
+                  <div>
+                    Required Budget:{" "}
+                    <Badge variant="outline">
+                      {event?.budget_forms?.estimated_budget || "N/A"} BDT
+                    </Badge>
+                  </div>
+                  <div>
+                    Sponsor:{" "}
+                    <Badge variant="outline">
+                      {event?.event_forms?.sponsor_names || "N/A"}
+                    </Badge>
+                  </div>
                   <div className="flex gap-2 justify-between items-center mt-4">
                     <Dialog>
                       <DialogTrigger asChild>
@@ -90,16 +113,8 @@ export default function FinanceDashboard() {
                           View Details
                         </Button>
                       </DialogTrigger>
-                      <BudgetForm />
+                      <BudgetForm event={event} />
                     </Dialog>
-                    <div className="flex gap-2">
-                      <Button variant="secondary" size="sm">
-                        Approve
-                      </Button>
-                      <Button variant="destructive" size="sm">
-                        Reject
-                      </Button>
-                    </div>
                   </div>
                 </div>
               </CardContent>

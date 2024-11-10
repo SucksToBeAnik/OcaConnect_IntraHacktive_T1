@@ -40,7 +40,7 @@ export default async function Page() {
       pageContent = <HrDashboard clubMembers={clubMembers} eligibleMembersForInvite={eligibleMembersForInvite} clubId={activeClubProfile.data.club_id} />;
       break;
     case "finance":
-      pageContent = <FinanceDashboard />;
+      pageContent = <FinanceDashboard clubId={activeClubProfile.data.club_id} />;
       break;
     case "panel":
       pageContent = <PanelDashboard clubId={activeClubProfile.data.club_id} />;

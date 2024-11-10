@@ -53,7 +53,7 @@ const formSchema = z.object({
   event_start_time: z.string().optional(),
   event_end_time: z.string().optional(),
   location: z.string().optional(),
-  audience: z.number().optional(),
+  audience: z.number().min(0).optional(),
   technical_needs: z.string().optional(),
   physical_setup: z.string().optional(),
   objectives: z.string().optional(),
@@ -72,7 +72,7 @@ const EventForm = ({ event, isApproved }) => {
       event_start_time: event?.event_forms?.event_start_time || "",
       event_end_time: event?.event_forms?.event_end_time || "",
       location: event?.event_forms?.location || "",
-      audience: event?.event_forms?.audience || 0,
+      audience: event?.event_forms?.audience ? Number(event?.event_forms?.audience) : 0,
       technical_needs: event?.event_forms?.technical_needs || "",
       physical_setup: event?.event_forms?.physical_setup || "",
       objectives: event?.event_forms?.objectives || "",
@@ -230,9 +230,11 @@ const EventForm = ({ event, isApproved }) => {
                           type="number"
                           placeholder="Enter expected audience size"
                           {...field}
-                          onChange={(e) =>
-                            field.onChange(parseInt(e.target.value))
-                          }
+                          value={field.value || ''}
+                          onChange={(e) => {
+                            const value = e.target.value === '' ? 0 : Number(e.target.value);
+                            field.onChange(value);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
