@@ -23,18 +23,7 @@ import {
 
 const EventForm = () => {
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-      <Button 
-            variant="outline" 
-            className="w-full flex items-center gap-2"
-            >
-            <Fullscreen className="h-4 w-4" />
-            Expand
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <Card className="border-0 shadow-none">
+    <Card className="border-0 shadow-none h-[calc(100vh-400px)] overflow-y-auto p-4">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-6 w-6 text-foreground" />
@@ -239,15 +228,8 @@ const EventForm = () => {
                 special considerations, or additional context that would be helpful for the review panel.
               </p>
             </div>
-
-            {/* Updated Submit Button */}
-            <Button className="w-full">
-              Send to Panel for Review
-            </Button>
           </CardContent>
         </Card>
-      </DialogContent>
-    </Dialog>
   );
 };
 
