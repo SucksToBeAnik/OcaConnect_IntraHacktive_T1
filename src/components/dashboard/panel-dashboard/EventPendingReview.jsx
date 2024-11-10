@@ -234,17 +234,21 @@ export default function EventPendingReview({ pendingEvents }) {
     }
   };
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Waiting for your review</CardTitle>
+    <Card className="w-full border-none">
+      <CardHeader className="p-0 text-left my-4">
+        <CardTitle>
+          <Button variant="secondary" size="lg" className="cursor-text text-md font-semibold">
+            Waiting for your review
+          </Button>
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent className="p-0">
+        <div className="space-y-8">
           {pendingEvents.map((event) => (
-            <div key={event.id} className="rounded-lg space-y-4 border p-2">
+            <div key={event.id} className="rounded-lg space-y-2 shadow-lg shadow-gray-900">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-semibold">{event.title}</h3>
+                  <h3 className="text-md font-medium">{event.title}</h3>
                 </div>
                 <div className="flex gap-2">
                   <Button

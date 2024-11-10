@@ -20,7 +20,7 @@ export const clubMembersColumns = [
     header: "Name",
     cell: ({ row }) => {
       const name = row.original.club_members.name;
-      return <Badge variant="outline">{name}</Badge>;
+      return <Badge variant="outline" className="cursor-text text-md">{name}</Badge>;
     },
   },
   {
@@ -38,7 +38,7 @@ export const clubMembersColumns = [
     },
     cell: ({ row }) => {
       const email = row.original.club_members.email;
-      return <Badge variant="outline">{email}</Badge>;
+      return <Badge variant="outline" className="cursor-text text-md">{email}</Badge>;
     },
   },
   {
@@ -46,7 +46,7 @@ export const clubMembersColumns = [
     header: "Role",
     cell: ({ row }) => {
       const role = row.original.role;
-      return <Badge variant="outline">{role}</Badge>;
+      return <Badge variant="secondary" className="cursor-text text-md">{role}</Badge>;
     },
   },
   {

@@ -1,3 +1,5 @@
+"use server";
+
 import SelectClub from "./SelectClub";
 import { Bell, LogOut, User, Settings } from "lucide-react"; // For icons
 import Link from "next/link";
@@ -11,10 +13,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getAuthorizedUser } from "@/db-actions/auth.users/server";
-import { getUserActiveClubProfile, getAllClubProfilesGivenUserId } from "@/db-actions/club-profiles/server";
+import {
+  getUserActiveClubProfile,
+  getAllClubProfilesGivenUserId,
+} from "@/db-actions/club-profiles/server";
 import { redirect } from "next/navigation";
 import { getActiveClubMember } from "@/db-actions/club-members/server";
 import { Badge } from "@/components/ui/badge";
+import DropdownLogout from "./DropdownLogout";
+import { createClient } from "@/utils/supabase/server";
+
+async function logout() {
+  "use server";
+  const supabase = createClient();
+  await supabase.auth.signOut();
+  redirect("/login");
+}
 
 export default async function Navbar() {
   let userClubProfiles = [];
@@ -27,7 +41,9 @@ export default async function Navbar() {
   if (!clubMemberData.success) {
     redirect("/login");
   }
-  const userClubProfilesData = await getAllClubProfilesGivenUserId(clubMemberData.data.id);
+  const userClubProfilesData = await getAllClubProfilesGivenUserId(
+    clubMemberData.data.id
+  );
 
   if (userClubProfilesData.success) {
     userClubProfiles = userClubProfilesData.data;
@@ -35,10 +51,10 @@ export default async function Navbar() {
 
   // Find the active club profile to get the role
   const activeClubProfile = userClubProfiles.find(
-    profile => profile.id === clubMemberData.data.active_club_profile
+    (profile) => profile.id === clubMemberData.data.active_club_profile
   );
-  const userRole = activeClubProfile?.role || 'N/A';
-  const userName = clubMemberData.data.name || 'N/A';
+  const userRole = activeClubProfile?.role || "N/A";
+  const userName = clubMemberData.data.name || "N/A";
 
   return (
     <nav className="w-full shadow-md shadow-gray-900 p-6 rounded-b-lg">
@@ -52,17 +68,21 @@ export default async function Navbar() {
             connect
           </div>
 
-          <SelectClub clubProfiles={userClubProfiles} userId={clubMemberData.data.id} activeClubProfileId={clubMemberData.data.active_club_profile} />
+          <SelectClub
+            clubProfiles={userClubProfiles}
+            userId={clubMemberData.data.id}
+            activeClubProfileId={clubMemberData.data.active_club_profile}
+          />
         </div>
 
         {/* Right section: Navigation Links and Icons */}
         <div className="flex items-center gap-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6 mr-12">
             <Link href="/dashboard" className="hover:text-primary">
               Dashboard
             </Link>
-            <Link href="/events" className="hover:text-primary">
-              Events
+            <Link href="/history" className="hover:text-primary">
+              Event History
             </Link>
           </div>
 
@@ -77,14 +97,21 @@ export default async function Navbar() {
                     src="/placeholder-avatar.jpg"
                     alt="User avatar"
                   />
-                  <AvatarFallback>{userName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  <AvatarFallback>
+                    {userName
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
                 <DropdownMenuLabel>
                   <div className="flex justify-between items-start">
                     <p>{userName}</p>
-                    <Badge variant="outline" className="text-sm">{userRole}</Badge>
+                    <Badge variant="outline" className="text-sm">
+                      {userRole}
+                    </Badge>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -97,10 +124,7 @@ export default async function Navbar() {
                   <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
+                <DropdownLogout logoutAction={logout} />
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
