@@ -46,6 +46,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { createClient } from "@/utils/supabase/client";
 import { DialogHeader } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 // Define the validation schema with optional fields
 const formSchema = z.object({
@@ -65,6 +66,7 @@ const formSchema = z.object({
 });
 
 const EventForm = ({ event, isApproved }) => {
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,7 +74,9 @@ const EventForm = ({ event, isApproved }) => {
       event_start_time: event?.event_forms?.event_start_time || "",
       event_end_time: event?.event_forms?.event_end_time || "",
       location: event?.event_forms?.location || "",
-      audience: event?.event_forms?.audience ? Number(event?.event_forms?.audience) : 0,
+      audience: event?.event_forms?.audience
+        ? Number(event?.event_forms?.audience)
+        : 0,
       technical_needs: event?.event_forms?.technical_needs || "",
       physical_setup: event?.event_forms?.physical_setup || "",
       objectives: event?.event_forms?.objectives || "",
@@ -113,7 +117,12 @@ const EventForm = ({ event, isApproved }) => {
     });
     toast.promise(formSubmissionPromise, {
       loading: "Updating event form...",
-      success: "Event form updated successfully",
+      success: () => {
+        setTimeout(() => {
+          router.refresh();
+        }, 500);
+        return "Event form updated successfully";
+      },
       error: "Failed to update event form",
     });
   };
@@ -126,7 +135,7 @@ const EventForm = ({ event, isApproved }) => {
             <Calendar className="h-6 w-6 text-foreground" />
             <div>
               <span className="font-bold text-lg">{event?.title}</span>
-              <span className="">-{" "}Event Form</span>
+              <span className="">- Event Form</span>
             </div>
           </div>
         </DialogTitle>
@@ -230,9 +239,12 @@ const EventForm = ({ event, isApproved }) => {
                           type="number"
                           placeholder="Enter expected audience size"
                           {...field}
-                          value={field.value || ''}
+                          value={field.value || ""}
                           onChange={(e) => {
-                            const value = e.target.value === '' ? 0 : Number(e.target.value);
+                            const value =
+                              e.target.value === ""
+                                ? 0
+                                : Number(e.target.value);
                             field.onChange(value);
                           }}
                         />

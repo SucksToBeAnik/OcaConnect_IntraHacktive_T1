@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import HrDashboard from "@/components/dashboard/HrDashboard";
 import { getClubProfilesGivenClubId } from "@/db-actions/club-profiles/server";
 import { getAuthorizedUser } from "@/db-actions/auth.users/server";
@@ -7,12 +9,13 @@ import FinanceDashboard from "@/components/dashboard/FinanceDashboard";
 import EmptyContent from "@/components/root/EmptyContent";
 import PanelDashboard from "@/components/dashboard/panel-dashboard/PanelDashboard";
 
-
 export default async function Page() {
   const authorizedUser = await getAuthorizedUser();
   console.log(authorizedUser);
-  const activeClubProfile = await getUserActiveClubProfile(authorizedUser.data.id);
-  if(!activeClubProfile.success){
+  const activeClubProfile = await getUserActiveClubProfile(
+    authorizedUser.data.id
+  );
+  if (!activeClubProfile.success) {
     return <EmptyContent message="You are not a member of any club" />;
   }
   let clubMembers = [];
@@ -23,7 +26,7 @@ export default async function Page() {
       activeClubProfile.data.club_id
     );
     clubMembers = clubProfiles.data;
-  }else{
+  } else {
     console.log(activeClubProfile.message);
   }
   const allClubMembers = await getAllClubMembers();
@@ -32,25 +35,39 @@ export default async function Page() {
   let pageContent;
   const role = activeClubProfile.data.role;
   if (role === "hr") {
-    pageContent = <HrDashboard clubMembers={clubMembers} eligibleMembersForInvite={eligibleMembersForInvite} clubId={activeClubProfile.data.club_id} />;
+    pageContent = (
+      <HrDashboard
+        clubMembers={clubMembers}
+        eligibleMembersForInvite={eligibleMembersForInvite}
+        clubId={activeClubProfile.data.club_id}
+      />
+    );
   }
 
   switch (role) {
     case "hr":
-      pageContent = <HrDashboard clubMembers={clubMembers} eligibleMembersForInvite={eligibleMembersForInvite} clubId={activeClubProfile.data.club_id} />;
+      pageContent = (
+        <HrDashboard
+          clubMembers={clubMembers}
+          eligibleMembersForInvite={eligibleMembersForInvite}
+          clubId={activeClubProfile.data.club_id}
+        />
+      );
       break;
     case "finance":
-      pageContent = <FinanceDashboard clubId={activeClubProfile.data.club_id} />;
+      pageContent = (
+        <FinanceDashboard clubId={activeClubProfile.data.club_id} />
+      );
       break;
     case "panel":
       pageContent = <PanelDashboard clubId={activeClubProfile.data.club_id} />;
       break;
     default:
-      pageContent = <EmptyContent message="You are not authorized to access this page" />;
+      pageContent = (
+        <EmptyContent message="You are not authorized to access this page" />
+      );
       break;
   }
 
-  return <div>
-    {pageContent}
-  </div>;
+  return <div>{pageContent}</div>;
 }

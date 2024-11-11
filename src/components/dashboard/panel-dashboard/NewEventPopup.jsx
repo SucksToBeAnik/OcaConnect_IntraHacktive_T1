@@ -80,7 +80,9 @@ const NewEventPopup = ({ clubId }) => {
     toast.promise(formSubmissionPromise, {
       loading: "Creating event...",
       success: () => {
-        router.refresh();
+        setTimeout(() => {
+          router.refresh();
+        }, 500);
         setOpen(false);
         return "Event created successfully";
       },

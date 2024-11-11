@@ -41,6 +41,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   estimated_budget: z.coerce.number().min(0, "Budget must be greater than 0").optional(),
@@ -58,6 +59,7 @@ const formSchema = z.object({
 });
 
 const BudgetForm = ({ event, isApproved }) => {
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -108,7 +110,12 @@ const BudgetForm = ({ event, isApproved }) => {
 
     toast.promise(formSubmissionPromise, {
       loading: "Updating budget form...",
-      success: "Budget form updated successfully",
+      success: () => {
+        setTimeout(() => {
+          router.refresh();
+        }, 500);
+        return "Budget form updated successfully";
+      },
       error: "Failed to update budget form",
     });
   };

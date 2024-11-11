@@ -61,7 +61,9 @@ const FormActions = ({ formType, eventId }) => {
           toast.error("Failed to approve event");
         }
       }
-      router.refresh();
+      setTimeout(() => {
+        router.refresh();
+      }, 500);
       toast.success(
         `${formType === "budget" ? "Budget" : "Event"} approved successfully`
       );
@@ -177,6 +179,7 @@ const FormActions = ({ formType, eventId }) => {
 };
 
 export default function EventPendingReview({ pendingEvents }) {
+  const router = useRouter();
   const sendToOCA = async (eventId) => {
     console.log("Sending to OCA:", eventId);
     const supabase = createClient();
@@ -202,6 +205,9 @@ export default function EventPendingReview({ pendingEvents }) {
       console.log("Error sending to OCA:", eventError);
       toast.error("Failed to send to OCA");
     } else {
+      setTimeout(() => {
+        router.refresh();
+      }, 500);
       toast.success("Event sent to OCA successfully");
     }
   };
@@ -237,7 +243,11 @@ export default function EventPendingReview({ pendingEvents }) {
     <Card className="w-full border-none">
       <CardHeader className="p-0 text-left my-4">
         <CardTitle>
-          <Button variant="secondary" size="lg" className="cursor-text text-md font-semibold">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="cursor-text text-md font-semibold"
+          >
             Waiting for your review
           </Button>
         </CardTitle>
@@ -245,7 +255,10 @@ export default function EventPendingReview({ pendingEvents }) {
       <CardContent className="p-0">
         <div className="space-y-8">
           {pendingEvents.map((event) => (
-            <div key={event.id} className="rounded-lg space-y-2 shadow-lg shadow-gray-900">
+            <div
+              key={event.id}
+              className="rounded-lg space-y-2 shadow-lg shadow-gray-900"
+            >
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="text-md font-medium">{event.title}</h3>
