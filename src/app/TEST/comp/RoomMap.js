@@ -106,7 +106,7 @@ const RoomMap = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Open Room Map</Button>
+        <Button variant="secondary" className="inline-block w-36 ml-right text-center">Open Room Map</Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl h-[80vh]">
         <DialogHeader>
