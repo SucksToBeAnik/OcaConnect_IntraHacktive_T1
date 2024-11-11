@@ -22,7 +22,11 @@ import { Input } from "@/components/ui/input";
 import { SearchToInviteCombobox } from "./SearchToInviteCombobox";
 import { toast } from "sonner";
 
-export default function HrDashboard({ clubMembers, eligibleMembersForInvite, clubId }) {
+export default function HrDashboard({
+  clubMembers,
+  eligibleMembersForInvite,
+  clubId,
+}) {
   const [showPendingInvites, setShowPendingInvites] = useState(false);
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
@@ -34,17 +38,21 @@ export default function HrDashboard({ clubMembers, eligibleMembersForInvite, clu
       toast.error("Please select a member and a role");
       return;
     }
-    
+
     const loadingToast = toast.loading("Sending invitation...");
     setIsSendingInvitation(true);
-    
+
     try {
       const response = await fetch("/api/invite-club-member", {
         method: "POST",
-        body: JSON.stringify({ email: selectedMember.email, role: selectedRole, club_id: clubId }),
+        body: JSON.stringify({
+          email: selectedMember.email,
+          role: selectedRole,
+          club_id: clubId,
+        }),
       });
       const data = await response.json();
-      
+
       toast.dismiss(loadingToast);
       if (response.ok) {
         toast.success("Invitation sent successfully");
@@ -59,38 +67,51 @@ export default function HrDashboard({ clubMembers, eligibleMembersForInvite, clu
     }
   }
   const pendingInvites = [
-    { email: "aljami.islam.anik@g.bracu.ac.bd", message: "Please accept the invitation senpai" },
-    { email: "mustafis.ahsan@g.bracu.ac.bd", message: "I want to join the club" },
+    {
+      email: "aljami.islam.anik@g.bracu.ac.bd",
+      message: "Please accept the invitation senpai",
+    },
+    {
+      email: "mustafis.ahsan@g.bracu.ac.bd",
+      message: "I want to join the club",
+    },
   ];
 
   return (
     <div>
-      <h1 className="text-4xl mb-6 text-center font-bold bg-gradient-to-r from-pink-800 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
-        HR Dashboard
-      </h1>
+      <div className="flex justify-between items-start mb-6">
+        <h1 className="text-8xl font-bold tracking-tight lg:text-5xl">
+          <div>HR</div>
+          <div className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-transparent">
+            <div>Dashboard</div>
+          </div>
+        </h1>
+        <div className="flex justify-end gap-4">
+          <Button
+            variant="outline"
+            className="flex items-center gap-2"
+            onClick={() => setShowInviteForm(true)}
+          >
+            <UserPlus className="h-4 w-4" />
+            Invite Member
+          </Button>
 
-      <div className="flex flex-row justify-between items-center gap-4 mb-6">
-        <Button
-          variant="outline"
-          className="flex items-center gap-2"
-          onClick={() => setShowInviteForm(true)}
-        >
-          <UserPlus className="h-4 w-4" />
-          Invite Member
-        </Button>
-
-        <Button
-          variant="outline"
-          className="flex items-center gap-2"
-          onClick={() => setShowPendingInvites(true)}
-        >
-          <Mail className="h-4 w-4" />
-          Pending Invites
-          <span className="ml-2 bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
-            {pendingInvites.length}
-          </span>
-        </Button>
+          <Button
+            variant="outline"
+            className="flex items-center gap-2"
+            onClick={() => setShowPendingInvites(true)}
+          >
+            <Mail className="h-4 w-4" />
+            Pending Invites
+            <span className="ml-2 bg-primary text-primary-foreground rounded-full px-2 py-0.5 text-xs">
+              {pendingInvites.length}
+            </span>
+          </Button>
+        </div>
       </div>
+      {/* <h1 className="text-4xl mb-6 text-center font-bold bg-gradient-to-r from-pink-800 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
+        HR Dashboard
+      </h1> */}
 
       <Dialog open={showInviteForm} onOpenChange={setShowInviteForm}>
         <DialogContent>

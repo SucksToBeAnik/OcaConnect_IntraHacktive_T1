@@ -51,7 +51,7 @@ export default function PanelDashboard({ clubId }) {
         {/* Right column */}
         <div className="col-span-8 flex flex-col gap-4">
           {/* Chat box */}
-          <div className="flex-col justify-start items-end ">
+          <div className="flex justify-between items-start">
             <h1 className="text-8xl font-bold tracking-tight lg:text-5xl">
               <div>Nothig More Easy</div>
               Than Hosting an

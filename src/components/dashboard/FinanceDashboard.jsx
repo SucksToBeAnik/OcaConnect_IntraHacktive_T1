@@ -130,7 +130,7 @@ export default async function FinanceDashboard({ clubId }) {
       <div className="col-span-5 flex flex-col gap-6">
         <div className="space-y-4 max-h-[calc(100vh-190px)] overflow-y-auto pr-2">
           <h2 className="text-2xl font-semibold text-muted-foreground sticky top-0 bg-background py-2">
-            Past Events
+            Past Event Budgets
           </h2>
           {pastEvents.map((event, index) => (
             <Card key={index}>
