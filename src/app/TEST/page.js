@@ -26,13 +26,10 @@ const TEST = () => {
 
         {/* Right column */}
         <div className="col-span-8 flex flex-col gap-4">
-          <Card className='p-5'>
-            <RoomMap></RoomMap>
-          </Card>
+          <RoomMap></RoomMap>
+
           <ArchivedEvents></ArchivedEvents>
         </div>
-
-        
       </div>
     </div>
   );
