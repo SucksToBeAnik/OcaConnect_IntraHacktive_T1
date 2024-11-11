@@ -11,7 +11,7 @@
 - **Dedicated Dashboards**: A dedicated dashboard for each role of club members and OCA members to manage events and budgets.
 
 <img style="border-radius: 10px;" src="public/images/panel-dashboard.png" width="100%" alt="Panel Dashboard">
-<div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 20px;">
+<div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px;">
   
   <img style="border-radius: 10px;" src="public/images/finance-dashboard.png" width="45%" alt="Finance Dashboard">
   <img style="border-radius: 10px;" src="public/images/hr-dashboard.png" width="45%" alt="HR Dashboard">
@@ -21,5 +21,7 @@
 
 > [!NOTE]
 > **Frontend**: `Next.js`, `Tailwind CSS`, `Shadcn UI`
+> 
 > **Backend**: `Next.js API Routes`
+> 
 > **Database**: `Supabase`
